@@ -1,0 +1,120 @@
+---
+title: "DataWrangling3.1"
+author: "Jeremie Young"
+date: "October 1, 2018"
+output: html_document
+---
+
+# 0: Load the data in RStudio
+
+```{r}
+refine <- read_excel("C:/Users/jeremiey/Desktop/Dplyr/Data Wrangling Exercises/Project Data Wrangling Exercise 1 - Basic Data Manipulation/refine.xlsx")
+refine
+```
+
+# Import both dplyr and tidyr packages to use
+```{r}
+library(dplyr)
+library(tidyr)
+```
+
+# 1: Clean up brand names
+
+# determine all the unique values that exist in the company column
+```{r}
+unique(refine_lower$company)
+```
+
+# lowercase brand names
+
+```{r}
+refine_lower <- refine %>% 
+mutate(company = tolower(company))
+refine_lower
+```
+
+#  clean out typos
+
+```{r}
+refine_notypo_all <- refine_lower %>% 
+  mutate(
+    company = replace(company, company == "phllips", "philips"),
+    company = replace(company, company == "phillps", "philips"),
+    company = replace(company, company == "akz0", "akzo"),
+    company = replace(company, company == "ak zo", "akzo"), 
+    company = replace(company, company == "fillips" , "philips"), 
+    company = replace(company, company == "phlips" , "philips"), 
+    company = replace(company, company == "unilver" , "unilever")
+  )
+refine_notypo_all
+```
+
+# 2: Separate product code and number while retaining original columns
+
+```{r}
+refine_sep <- refine_notypo_all %>% 
+  separate(`Product code / number`, c("product_code", "product_number"), sep = "-", remove = FALSE)
+
+refine_sep
+```
+
+# 3: Add product categories
+
+```{r}
+product_category = case_when(
+  refine_sep$product_code == "p" ~ "Smartphone",
+  refine_sep$product_code == "v" ~ "TV",
+  refine_sep$product_code == "x" ~ "Laptop",
+  refine_sep$product_code == "q" ~ "Tablet" 
+    )
+product_category
+
+```
+
+# add product category vector to dataframe between product code and product number
+
+```{r}
+library(tibble)
+
+refine_categorized <- add_column(refine_sep, product_category, .after = "product_code")
+refine_categorized
+```
+
+# 4: Add full address for geocoding
+
+```{r}
+refine_full_address <- refine_categorized %>% 
+  unite("full_address", address, city, country, sep = ",", remove = FALSE)
+
+refine_full_address
+```
+
+# 5: Create dummy variables for company and product category
+
+```{r}
+refine_final <- refine_full_address %>% 
+  mutate(
+    company_philips = ifelse(company == "philips", 1, 0),
+    company_akzo = ifelse(company == "akzo", 1, 0), 
+    company_van_houten = ifelse(company == "van houten", 1, 0), 
+    company_unilever = ifelse(company == "unilever", 1, 0), 
+  
+    product_smartphone = ifelse(product_code == "p", 1, 0), 
+    product_tv = ifelse(product_code == "v", 1, 0), 
+    product_laptop = ifelse(product_code == "x", 1, 0), 
+    product_tablet = ifelse(product_code == "q", 1, 0) 
+  ) 
+
+refine_final
+```
+
+
+# 6: Submit the project on Github
+
+```{r}
+write.table(refine_final, "refine_clean.csv", row.names = FALSE, sep = ",")
+
+```
+
+
+
