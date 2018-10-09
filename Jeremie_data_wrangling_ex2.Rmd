@@ -64,15 +64,3 @@ titanic_clean
 ```{r}
 write_csv(titanic_clean, "titanic_clean.csv")
 ```
-
-
-
-
-
-
-
-
-
-
-
-
