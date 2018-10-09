@@ -1,0 +1,82 @@
+---
+title: "Jeremie_data_wrangling_ex2"
+author: "Jeremie Young"
+date: "October 9, 2018"
+output: html_document
+---
+
+# load titanic dataset as CSV file
+```{r}
+titanic_original <- read_csv("C:/Users/jeremiey/Desktop/Dplyr/Data Wrangling Exercises/Project Data Wrangling Exercise 2/titanic_original.csv")
+titanic_original
+```
+
+# Import both dplyr and tidyr packages to use
+```{r}
+library(dplyr)
+library(tidyr)
+```
+
+
+# 1. Port of embarkation
+```{r}
+titanic_1 <- titanic_original %>% 
+  mutate(
+    embarked = replace(embarked, is.na(embarked), "S")
+  )
+
+titanic_1
+```
+
+# 2. Age - calculate mean of age
+```{r}
+mean_age <- mean(titanic_1$age, na.rm = TRUE)
+mean_age
+  
+```
+
+# Age - fill in missing values with mean age
+```{r}
+titanic_2 <- titanic_1 %>% 
+  mutate(
+    age = replace(age, is.na(age), mean_age)
+  )
+titanic_2
+```
+
+# 3. Lifeboat
+```{r}
+titanic_3 <- titanic_2 %>% 
+  mutate(
+    boat = replace(boat, is.na(boat), "None")
+  )
+titanic_3
+```
+
+# 4. Cabin
+```{r}
+library(tibble)
+
+titanic_clean <- titanic_3 %>% 
+  mutate(
+    has_cabin_number = ifelse(!is.na(cabin), 1, 0)
+  )
+titanic_clean
+```
+
+5. Submit the project on Github
+```{r}
+write_csv(titanic_clean, "titanic_clean.csv")
+```
+
+
+
+
+
+
+
+
+
+
+
+
