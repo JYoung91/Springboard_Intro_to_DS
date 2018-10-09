@@ -28,15 +28,11 @@ titanic_1 <- titanic_original %>%
 titanic_1
 ```
 
-# 2. Age - calculate mean of age
+# 2. Age - calculate mean of age and fill in missing values
 ```{r}
 mean_age <- mean(titanic_1$age, na.rm = TRUE)
 mean_age
-  
-```
 
-# Age - fill in missing values with mean age
-```{r}
 titanic_2 <- titanic_1 %>% 
   mutate(
     age = replace(age, is.na(age), mean_age)
