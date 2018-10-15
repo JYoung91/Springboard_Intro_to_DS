@@ -8,7 +8,7 @@ output: html_document
 # 0: Load the data in RStudio
 
 ```{r}
-refine <- read_excel("C:/Users/jeremiey/Desktop/Dplyr/Data Wrangling Exercises/Project Data Wrangling Exercise 1 - Basic Data Manipulation/refine.xlsx")
+refine <- read_csv("C:/Users/jeremiey/Desktop/Dplyr/Data Wrangling Exercises/Project Data Wrangling Exercise 1 - Basic Data Manipulation/refine_original.csv")
 refine
 ```
 
@@ -112,7 +112,7 @@ refine_final
 # 6: Submit the project on Github
 
 ```{r}
-write_csv(refine_final, "refine_clean.csv")
+write.csv(refine_final, "refine_clean.csv", row.names = FALSE, sep = ",")
 
 ```
 
