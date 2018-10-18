@@ -74,4 +74,5 @@ posn.jd <- position_jitterdodge(0.5, 0, 0.8)
 
 ggplot(titanic, aes(x = Sex, y = Age, col = Survived)) +
   geom_point(position = posn.jd, size = 3, alpha = 0.5) +
-  facet_grid(. ~ Pclass)
+  facet_grid(. ~ Pclass) +
+  labs(title ="Battle for Survival on Titanic by Class & Sex")
